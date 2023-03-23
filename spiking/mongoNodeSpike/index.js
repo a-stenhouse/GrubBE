@@ -1,8 +1,10 @@
 const { MongoClient } = require("mongodb");
-
 // Replace the uri string with your connection string.
-const uri ="";
-
+require("dotenv").config({
+  path: `${__dirname}/./.env.uriString`,
+});
+const uri = process.env.MONGO_URI;
+console.log(uri);
 const client = new MongoClient(uri);
 
 function createAnEntry() {
@@ -25,7 +27,7 @@ function readAnEntry() {
   const query = { name: "pineapple" };
   snacks
     .findOne(query)
-    .then((response) => console.log(response.quantity))
+    .then((response) => console.log(response))
     .finally(() => client.close());
   // the client.close is called to close the connection to the mongodb server
 }

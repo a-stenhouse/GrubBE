@@ -8,9 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "mongodb": "5.1"
-  }
+  "license": "ISC"
 }
