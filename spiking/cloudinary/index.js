@@ -1,7 +1,5 @@
 const cloudinary = require("cloudinary").v2;
 const config = require("./cloudinaryConfig");
-const fs = require("fs/promises");
-const { readdir } = require("fs");
 
 cloudinary.config(config);
 
