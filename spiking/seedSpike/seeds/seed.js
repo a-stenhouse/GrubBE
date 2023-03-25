@@ -1,12 +1,5 @@
-const db = require("../connection");
+const { db, User } = require("../db/connection");
 const mongoose = require("mongoose");
-
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-});
-
-const User = mongoose.model("snack", userSchema);
 
 function seed(userData) {
   return db

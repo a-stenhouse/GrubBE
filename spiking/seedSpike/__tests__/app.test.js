@@ -1,16 +1,20 @@
-const testUserData = require("../data/test/users");
+const testUserData = require("../db/data/test/users");
+const { db } = require("../db/connection");
 const seed = require("../seeds/seed");
-const db = require("../connection");
+const request = require("supertest");
+const app = require("../app");
 
-beforeEach(() => seed(testUserData));
+beforeAll(() => seed(testUserData));
 
-afterAll(() => {
-  db.close();
-});
+afterAll(() => db.close());
 
-describe("Test reseeding function", () => {
-  it("Should reseed the database before each test", () => {
-    db.dropCollection("snacks");
-    expect("s").toBe("s");
+describe("/users", () => {
+  it("GET:200 should return an array of users", () => {
+    return request(app)
+      .get("/users")
+      .expect(200)
+      .then((data) => {
+        console.log(Object.keys(data));
+      });
   });
 });
