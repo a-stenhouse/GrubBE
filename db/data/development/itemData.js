@@ -31,7 +31,7 @@ module.exports = [
   },
   {
     name: "Weetabix",
-    category: "Cereal",
+    category: "Cereals",
     description:
       "Half a pack of weetabix, I can't stand them!! Thought I would like them but turns out they taste like cardboard. Can't believe I managed to even eat half the pack!!",
     username: "HungryToad",
@@ -78,7 +78,7 @@ module.exports = [
   },
   {
     name: "Potatoes",
-    category: "Fruit and veggies",
+    category: "Fruits and veggies",
     description: "Half a bag of Albert Bartletts, still fresh!",
     username: "HungryToad",
     location: {
@@ -93,7 +93,7 @@ module.exports = [
   },
   {
     name: "Onions",
-    category: "Fruit and veggies",
+    category: "Fruits and veggies",
     description:
       "Bag of unused onions. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
     username: "PlanetSaver12",
@@ -109,7 +109,7 @@ module.exports = [
   },
   {
     name: "Carrots",
-    category: "Fruit and veggies",
+    category: "Fruits and veggies",
     description:
       "Bag of unused carrots. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
     username: "PlanetSaver12",
@@ -125,7 +125,7 @@ module.exports = [
   },
   {
     name: "Apples",
-    category: "Fruit and veggies",
+    category: "Fruits and veggies",
     description:
       "Bag of half used Apples. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
     username: "PlanetSaver12",
