@@ -1,8 +1,8 @@
-const { userData, itemData, categoryData } = require("../db/data/dev/");
+const { userData, itemData, categoryData } = require("../data/development/");
 const { db } = require("../connection");
-import seed from "../seed/seed";
+const seed = require("../seed/seed");
 
 const runSeed = () => {
-  return seed(userData, itemData, categoryData).then(() => db.close());
+  return seed(userData, categoryData, itemData).then(() => db.close());
 };
 runSeed();
