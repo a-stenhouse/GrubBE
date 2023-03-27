@@ -1,5 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const crypto = require("crypto");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 // Replace the uri string with your connection string.
 require("dotenv").config({
@@ -10,6 +13,22 @@ const uri = process.env.MONGO_URI;
 const app = express();
 
 app.use(express.json());
+
+passport.use(new LocalStrategy(
+  function (username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      crypto.pbkdf2(password, salt, 310000, 32, "sha256", function (err, hashedPassword) {
+        if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
+          return done(null, false);
+        }
+      })
+
+      return done(null, user);
+    });
+  }
+));
 
 const port = 9000;
 
@@ -45,16 +64,22 @@ app.get("/users/:userid", (request, response) => {
   });
 });
 
+// Upon creation of new user, encrypts password and stores randomly generated salt value
 app.post("/users", (request, response) => {
   const { username, password } = request.body;
-  const salt = "";
-  const newUser = new User({ username, password, salt });
+  const salt = crypto.randomBytes(16)
+  const hashedPassword = crypto.pbkdf2Sync(password, salt, 310000, 32, "sha256").toString("hex")
+  const newUser = new User({ username, password: hashedPassword, salt });
   newUser.save().then((result) => {
     response.status(201).send({ newUser: result });
   });
 });
 
-app.post("/users/validate", (request, response) => {});
+app.post("/users/validate", (request, response) => {
+  passport.authenticate("local",)
+  const { username, password } = request.body;
+  User.find({ username }).then((user) => validateCredentials(user))
+});
 
 app.get("/snacks", (request, response) => {
   Snack.find()
