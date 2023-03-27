@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon listener.js"
+    "start": "nodemon listener.js",
+    "seed": "NODE_ENV=development node ./db/seed/run-seed.js"
   },
   "keywords": [],
   "author": "",

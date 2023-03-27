@@ -1,8 +1,12 @@
 const mongoose = require("mongoose");
 
+const ENV = process.env.NODE_ENV || "test";
 require("dotenv").config({
-  path: `${__dirname}/../.env.mongoURI.test`,
+  path: `${__dirname}/../${
+    ENV === "test" ? ".env.mongoURI.test" : ".env.mongoURI.dev"
+  }`,
 });
+
 const uri = process.env.MONGO_URI;
 
 if (!process.env.MONGO_URI) {
