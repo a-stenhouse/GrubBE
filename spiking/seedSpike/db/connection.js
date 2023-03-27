@@ -1,3 +1,4 @@
+const { clear } = require("console");
 const mongoose = require("mongoose");
 
 require("dotenv").config({
