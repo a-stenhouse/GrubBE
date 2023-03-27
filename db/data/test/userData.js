@@ -28,5 +28,5 @@ module.exports = [
       longitude: -1.087222,
     },
     contact: "07563421234",
-  }
+},
 ];
