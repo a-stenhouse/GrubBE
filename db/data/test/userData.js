@@ -1,7 +1,8 @@
 module.exports = [
   {
     username: "John34",
-    password: "Bananas1995",
+    password: "6f5dd1655e97bf25bc1e213946f1d44b872b3d120ef60df267770138395d7b9a",//"Bananas1995",
+    salt: "5b62029b595ee89916c04dd77d104665",
     location: {
       latitude: 52.916668, // Derby
       longitude: -1.466667,
@@ -10,7 +11,8 @@ module.exports = [
   },
   {
     username: "Mike20",
-    password: "Manchester2021",
+    password: "7afb75179a49b52b5464a6b4dc1e0a6f33f7b1eed3c88cc2d4456c78809ed8f0",//"Manchester2021",
+    salt: "8bcecc94d1394ff74dcd1bbcf0cd2aa5",
     location: {
       latitude: 53.39254, // Warrington
       longitude: -2.58024,
@@ -19,74 +21,12 @@ module.exports = [
   },
   {
     username: "Janet876",
-    password: "Lancaster21",
+    password: "dffe4b88d705ab1518171786f4199105e0099aa62621613d6707f7d3b0c09e4c",//"Lancaster21",
+    salt: "cf1ecce6f08d5f583500d3aea18c494b",
     location: {
       latitude: 50.805832, // Portsmouth
       longitude: -1.087222,
     },
     contact: "07563421234",
-  },
-  {
-    username: "Domo",
-    password: "omod123",
-    location: {
-      latitude: 55.953251, // Edimburgh
-      longitude: -3.188267,
-    },
-    contact: "70907846241",
-  },
-  {
-    username: "RudysPizza",
-    password: "2023RudysEx990",
-    location: {
-      latitude: 50.716667, // Exeter
-      longitude: -3.533333,
-    },
-    contact: "07890936521",
-  },
-  {
-    username: "CoopEccleshalRd",
-    password: "sheFField1885632",
-    location: {
-      latitude: 51.380001, // Bath
-      longitude: -2.36,
-    },
-    contact: "07898876231",
-  },
-  {
-    username: "SainsburyLocal",
-    password: "b2bLiverpool2023",
-    location: {
-      latitude: 53.400002,
-      longitude: -2.983333, //Liverpool
-    },
-    contact: "07898890631",
-  },
-  {
-    username: "TescoExpressCrosby",
-    password: "33256TescoEx123",
-    location: {
-      latitude: 53.47, //Crosby
-      longitude: -3.046,
-    },
-    contact: "07898876224",
-  },
-  {
-    username: "SparLondonRd",
-    password: "sparLon2290",
-    location: {
-      latitude: 53.593349, // Bury
-      longitude: -2.296605,
-    },
-    contact: "07898878931",
-  },
-  {
-    username: "MorrisonDaleStr",
-    password: "Morris1234DALE",
-    location: {
-      latitude: 52.630886, //Norwich
-      longitude: 1.297355,
-    },
-    contact: "07896676231",
-  },
+  }
 ];
