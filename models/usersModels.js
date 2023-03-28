@@ -19,27 +19,23 @@ exports.fetchUser = (username) => {
 
 exports.addUser = (newUserObj) => {
   const { username, password, location, contact } = newUserObj;
-  return User.findOne({ username: newUserObj.username })
-    .then((response) => {
-      return response;
-    })
-    .then((response) => {
-      if (response) {
-        return Promise.reject({
-          status: 400,
-          msg: "Bad request username already exists",
-        });
-      }
-      const encryptedPassword = passwordHasher(password);
-      const { salt, hashedPassword } = encryptedPassword;
-      return User.create({
-        username,
-        password: hashedPassword,
-        salt,
-        location,
-        contact,
+  return User.findOne({ username: newUserObj.username }).then((response) => {
+    if (response) {
+      return Promise.reject({
+        status: 400,
+        msg: "Bad request username already exists",
       });
+    }
+    const encryptedPassword = passwordHasher(password);
+    const { salt, hashedPassword } = encryptedPassword;
+    return User.create({
+      username,
+      password: hashedPassword,
+      salt,
+      location,
+      contact,
     });
+  });
 };
 
 function passwordHasher(password) {

@@ -5,7 +5,7 @@ exports.getUsers = (request, response, next) => {
     .then((users) => {
       response.status(200).send({ users });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 exports.getUser = (request, response, next) => {
@@ -14,7 +14,7 @@ exports.getUser = (request, response, next) => {
     .then((user) => {
       response.status(200).send({ user });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 exports.postUser = (request, response, next) => {
@@ -23,7 +23,5 @@ exports.postUser = (request, response, next) => {
     .then((user) => {
       response.status(201).send({ user });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
