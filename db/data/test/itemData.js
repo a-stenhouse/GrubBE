@@ -1,5 +1,6 @@
 module.exports = [
   {
+    _id: "1",
     name: "bananas",
     category: "Fruits and veggies",
     description: "ready to eat bananas",
@@ -15,6 +16,7 @@ module.exports = [
     is_available: "true",
   },
   {
+    _id: "2",
     name: "Salmon",
     category: "Meat and Fish",
     description: "2 salmon fillets",
