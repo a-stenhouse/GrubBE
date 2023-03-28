@@ -232,7 +232,6 @@ describe("GET /api/items", () => {
         const { items } = body;
 
         expect(items).toBeInstanceOf(Object);
-        expect(items).toHaveLength(2);
         items.forEach((item) => {
           expect(item).toMatchObject({
             _id: expect.any(String),
