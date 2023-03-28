@@ -1,6 +1,9 @@
+const mongoose = require("mongoose");
+const {ObjectId} = require("mongodb")
+
 module.exports = [
   {
-    _id: "1",
+    _id: new ObjectId('56cb91bdc3464f14678934ca'),
     name: "bananas",
     category: "Fruits and veggies",
     description: "ready to eat bananas",
@@ -16,7 +19,7 @@ module.exports = [
     is_available: "true",
   },
   {
-    _id: "2",
+    _id: new ObjectId("61b0c4c065064fdfb889a141"),
     name: "Salmon",
     category: "Meat and Fish",
     description: "2 salmon fillets",

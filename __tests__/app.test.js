@@ -183,3 +183,116 @@ describe("POST /api/users", () => {
   });
 });
 
+describe("GET /api/items", () => {
+  it("200: should respond with an array of item objects", () => {
+    return request(app)
+      .get("/api/items")
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+
+        expect(items).toBeInstanceOf(Object);
+        expect(items).toHaveLength(2);
+        items.forEach((item) => {
+          expect(item).toMatchObject({
+            _id: expect.any(String),
+            __v: 0,
+            name: expect.any(String),
+            category: expect.any(String),
+            description: expect.any(String),
+            username: expect.any(String),
+            location: {
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
+            },
+            expiry_date: expect.any(String),
+            quantity: expect.any(Number),
+            item_url: expect.any(String),
+            is_available: expect.any(Boolean),
+          });
+        });
+      });
+  });
+  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
+    return request(app)
+      .get("/api/itemsjkdbgearjhgh3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
+      });
+  });
+});
+
+describe("GET /api/items", () => {
+  it("200: should respond with an array of item objects", () => {
+    return request(app)
+      .get("/api/items")
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+
+        expect(items).toBeInstanceOf(Object);
+        expect(items).toHaveLength(2);
+        items.forEach((item) => {
+          expect(item).toMatchObject({
+            _id: expect.any(String),
+            __v: 0,
+            name: expect.any(String),
+            category: expect.any(String),
+            description: expect.any(String),
+            username: expect.any(String),
+            location: {
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
+            },
+            expiry_date: expect.any(String),
+            quantity: expect.any(Number),
+            item_url: expect.any(String),
+            is_available: expect.any(Boolean),
+          });
+        });
+      });
+  });
+  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
+    return request(app)
+      .get("/api/itemsjkdbgearjhgh3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
+      });
+  });
+});
+
+describe("GET /api/items/:_id", () => {
+  it("200: should respond with a single item object", () => {
+    return request(app)
+    .get("/api/items/56cb91bdc3464f14678934ca")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.item).toEqual({
+        "location": {
+          "latitude": 52.916668,
+          "longitude": -1.466667
+        },
+        _id: "56cb91bdc3464f14678934ca",
+        name: "bananas",
+        category: expect.any(String),
+        description: "ready to eat bananas",
+        username: expect.any(String),
+        expiry_date: "29/3/2023",
+        quantity: 1,
+        item_url: "https://res.cloudinary.com/dhirydfr8/image/upload/v1679924952/grepww2o8mwrdebpkbsx.webp",
+        is_available: true,
+        __v: 0
+      })
+    })
+  })
+  it("404: should respond with a 404 Not found error message if the passed _id is valid but non-existent", () => {
+    return request(app)
+    .get("/api/items/56cb91bdc3222f14678934ca")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Item not found")
+    })
+  })
+})
