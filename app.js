@@ -1,5 +1,6 @@
 const express = require("express");
 // const { postUser, getUsers, getUser, getItems, getItem, postItem } = require("./controller.js")
+const { getItems } = require("./controllers/itemsControllers")
 const { getUsers, getUser } = require("./controllers/usersControllers.js")
 const { handlePathNotFound, customErrors } = require("./controllers/errorControllers.js")
 
@@ -20,7 +21,8 @@ app.get("/api/users", getUsers);
 app.get("/api/users/:username", getUser);
 
 // // Fetches all items in the items database
-// app.get("/items", getItems);
+app.get("/api/items", getItems);
+
 
 // // Fetches an item according to the specified _id
 // app.get("/items/:_id", getItem)
