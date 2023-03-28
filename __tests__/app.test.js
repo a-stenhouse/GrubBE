@@ -220,3 +220,19 @@ describe("GET /api/items", () => {
       });
   });
 });
+
+describe('DELETE /api/items/:_id', () => {
+  it('204: should respond with a 204 status "no content" when an item is deleted', () => {
+    return request(app)
+      .delete("/api/items/56cb91bdc3464f14678934ca")
+      .expect(204);
+  });
+  it("404: should respond with a message if passed an item id that does not exist", () => {
+    return request(app)
+      .delete("/api/items/56cb91bdc3464f14678934c3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Item not found")
+      });
+  });
+})

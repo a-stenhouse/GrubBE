@@ -15,12 +15,15 @@ const itemSchema = new mongoose.Schema({
     latitude: Number,
     longitude: Number,
   },
-  expiry_date: String,
+  expiry_date: {
+    type: Date
+  },
   quantity: Number,
   item_url: String,
   is_available: Boolean,
 });
 
 const Item = mongoose.model("item", itemSchema);
+
 
 module.exports = Item;

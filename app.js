@@ -1,6 +1,6 @@
 const express = require("express");
 // const { postUser, getUsers, getUser, getItems, getItem, postItem } = require("./controller.js")
-const { getItems } = require("./controllers/itemsControllers")
+const { getItems, deleteItem } = require("./controllers/itemsControllers")
 const {
   getUsers,
   getUser,
@@ -24,6 +24,8 @@ app.post("/api/users", postUser);
 
 
 app.get("/api/items", getItems);
+
+app.delete("/api/items/:_id", deleteItem);
 
 
 // // Fetches an item according to the specified _id
