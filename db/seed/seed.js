@@ -17,6 +17,7 @@ function seed(userData, categoryData, itemData) {
         promises.push(
           User.find({ username: item.username }).then((users) => users[0]._id)
         );
+
         promises.push(
           Category.find({ name: item.category }).then(
             (categories) => categories[0]._id
