@@ -1,4 +1,4 @@
-const { postNewItem } = require("../models/itemsModels");
+const { postNewItem, fetchItems } = require("../models/itemsModels");
 const { fetchUser } = require("../models/usersModels");
 const { fetchCategory } = require("../models/categoryModels");
 
@@ -21,4 +21,10 @@ exports.postItem = (request, response, next) => {
       return response.status(201).send({ item });
     })
     .catch(next);
+};
+
+exports.getItems = (request, response, next) => {
+    fetchItems().then((items) => {
+        response.status(200).send({items})
+    }).catch(next);
 };

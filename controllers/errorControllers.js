@@ -20,6 +20,11 @@ exports.mongooseErrors = (err, request, response, next) => {
   }
 };
 
+exports.handle500Errors = (error, request, response, next) => {
+  console.log(error);
+  response.status(500).send({ msg: "Server Error" });
+};
+
 exports.handlePathNotFound = (request, response) => {
   response.status(404).send({ msg: "Path not found" });
 };

@@ -82,7 +82,7 @@ describe("GET /api/users/:username", () => {
 });
 
 describe("POST /api/users", () => {
-  it.skip("201: should respond with the newly created user object", () => {
+  it("201: should respond with the newly created user object", () => {
     const newUser = {
       username: "Jake",
       password: "Mango1998",
@@ -99,6 +99,8 @@ describe("POST /api/users", () => {
       .then(({ body }) => {
         const { user } = body;
         expect(user).toEqual({
+          __v: 0,
+          _id: expect.any(String),
           username: "Jake",
           password: expect.any(String),
           salt: expect.any(String),
@@ -108,6 +110,76 @@ describe("POST /api/users", () => {
           },
           contact: "07934567890",
         });
+      });
+  });
+  it("201: should ignore any additional properties passed", () => {
+    const newUser = {
+      _id: 500,
+      username: "David",
+      password: "Mango1998",
+      location: {
+        latitude: 52.916668, // Derby
+        longitude: -1.466667,
+      },
+      contact: "07934567890",
+    };
+
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toEqual({
+          __v: 0,
+          _id: expect.any(String),
+          username: "David",
+          password: expect.any(String),
+          salt: expect.any(String),
+          location: {
+            latitude: 52.916668, // Derby
+            longitude: -1.466667,
+          },
+          contact: "07934567890",
+        });
+      });
+  });
+  it("400: should respond with a msg if passed a username that already exists", () => {
+    const newUser = {
+      username: "David",
+      password: "bluepeter",
+      location: {
+        latitude: 52.916668, // Derby
+        longitude: -1.466667,
+      },
+      contact: "07934567865",
+    };
+
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request username already exists");
+      });
+  });
+  it("404: should respond with  path not found if passed a valid but non existent path", () => {
+    const newUser = {
+      username: "Alex",
+      password: "bluepeter",
+      location: {
+        latitude: 52.916668, // Derby
+        longitude: -1.466667,
+      },
+      contact: "07934567865",
+    };
+
+    return request(app)
+      .post("/api/usrs")
+      .send(newUser)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
       });
   });
 });
@@ -301,6 +373,44 @@ describe("POST /api/items", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("bad request - quantity is required");
+        });
+   });
+});
+  
+describe("GET /api/items", () => {
+  it("200: should respond with an array of item objects", () => {
+    return request(app)
+      .get("/api/items")
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+
+        expect(items).toBeInstanceOf(Object);
+        expect(items).toHaveLength(2);
+        items.forEach((item) => {
+          expect(item).toMatchObject({
+            name: expect.any(String),
+            category: expect.any(String),
+            description: expect.any(String),
+            username: expect.any(String),
+            location: {
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
+            },
+            expiry_date: expect.any(String),
+            quantity: expect.any(Number),
+            item_url: expect.any(String),
+            is_available: expect.any(Boolean),
+          });
+        });
+      });
+  });
+  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
+    return request(app)
+      .get("/api/itemsjkdbgearjhgh3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
       });
   });
 });
