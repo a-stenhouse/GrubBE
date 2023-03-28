@@ -184,6 +184,44 @@ describe("POST /api/users", () => {
   });
 });
 
+describe("GET /api/items", () => {
+  it("200: should respond with an array of item objects", () => {
+    return request(app)
+      .get("/api/items")
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+
+        expect(items).toBeInstanceOf(Object);
+        expect(items).toHaveLength(2);
+        items.forEach((item) => {
+          expect(item).toMatchObject({
+            name: expect.any(String),
+            category: expect.any(String),
+            description: expect.any(String),
+            username: expect.any(String),
+            location: {
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
+            },
+            expiry_date: expect.any(String),
+            quantity: expect.any(Number),
+            item_url: expect.any(String),
+            is_available: expect.any(Boolean),
+          });
+        });
+      });
+  });
+  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
+    return request(app)
+      .get("/api/itemsjkdbgearjhgh3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
+      });
+  });
+});
+
 describe("POST /api/items", () => {
   it("201: should respond with the newly created item object", () => {
     const newItem = {
@@ -373,44 +411,6 @@ describe("POST /api/items", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("bad request - quantity is required");
-        });
-   });
-});
-  
-describe("GET /api/items", () => {
-  it("200: should respond with an array of item objects", () => {
-    return request(app)
-      .get("/api/items")
-      .expect(200)
-      .then(({ body }) => {
-        const { items } = body;
-
-        expect(items).toBeInstanceOf(Object);
-        expect(items).toHaveLength(2);
-        items.forEach((item) => {
-          expect(item).toMatchObject({
-            name: expect.any(String),
-            category: expect.any(String),
-            description: expect.any(String),
-            username: expect.any(String),
-            location: {
-              latitude: expect.any(Number),
-              longitude: expect.any(Number),
-            },
-            expiry_date: expect.any(String),
-            quantity: expect.any(Number),
-            item_url: expect.any(String),
-            is_available: expect.any(Boolean),
-          });
-        });
-      });
-  });
-  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
-    return request(app)
-      .get("/api/itemsjkdbgearjhgh3")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Path not found");
       });
   });
 });
