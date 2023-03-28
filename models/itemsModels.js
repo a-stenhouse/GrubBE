@@ -15,3 +15,9 @@ exports.fetchItemById = (_id) => {
     return item;
   });
 };
+
+exports.postNewItem = (newItem) => {
+  const itemToInsert = new Item(newItem);
+  return itemToInsert.save();
+};
+
