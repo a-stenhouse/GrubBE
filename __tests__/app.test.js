@@ -3,6 +3,7 @@ const { db } = require("../db/connection");
 const seed = require("../db/seed/seed");
 const request = require("supertest");
 const app = require("../app");
+const { describe } = require("node:test");
 
 beforeAll(() => seed(userData, categoryData, itemData));
 
@@ -183,6 +184,199 @@ describe("POST /api/users", () => {
   });
 });
 
+describe("POST /api/items", () => {
+  it("201: should respond with the newly created item object", () => {
+    const newItem = {
+      name: "bananas",
+      category: "Fruits and veggies",
+      description: "some lovely bananas",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      is_available: "true",
+      quantity: 1,
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(201)
+      .then(({ body }) => {
+        const { item } = body;
+        expect(item).toEqual({
+          name: "bananas",
+          description: "some lovely bananas",
+          location: { latitude: 10, longitude: 10 },
+          expiry_date: "some date",
+          is_available: true,
+          quantity: 1,
+          category: expect.any(String),
+          username: expect.any(String),
+          _id: expect.any(String),
+          __v: expect.any(Number),
+        });
+      });
+  });
+  it("201: newly posted items should be available", () => {
+    const newItem = {
+      name: "apples",
+      category: "Fruits and veggies",
+      description: "some lovely apples",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "false",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(201)
+      .then(({ body }) => {
+        const { item } = body;
+        expect(item.is_available).toBe(true);
+      });
+  });
+  it("201: should default a new items location to the users location if no location provided", () => {
+    const newItem = {
+      name: "carrots",
+      category: "Fruits and veggies",
+      description: "some lovely carrots",
+      username: "John34",
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(201)
+      .then(({ body }) => {
+        const { item } = body;
+        expect(item.location).toEqual({
+          latitude: 52.916668,
+          longitude: -1.466667,
+        });
+      });
+  });
+  it("201: should ignore superfluous keys", () => {
+    const newItem = {
+      name: "carrots",
+      category: "Fruits and veggies",
+      description: "some lovely carrots",
+      superfluous: "this key is not required",
+      username: "John34",
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(201)
+      .then(({ body }) => {
+        const { item } = body;
+        expect(item).not.toHaveProperty("superfluous");
+      });
+  });
+  it("404: should respond with a 404 if username does not exist ", () => {
+    const newItem = {
+      name: "bananas",
+      category: "Fruits and veggies",
+      description: "some lovely bananas",
+      username: "John",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("User not found");
+      });
+  });
+  it("404: should respond with a 404 if category does not exist ", () => {
+    const newItem = {
+      name: "bananas",
+      category: "Fruit and veggies",
+      description: "some lovely bananas",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("Category not found");
+      });
+  });
+  it("400: new items require a name", () => {
+    const newItem = {
+      category: "Fruits and veggies",
+      description: "some lovely fruit",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request - name is required");
+      });
+  });
+  it("400: new items require an expiry_date", () => {
+    const newItem = {
+      name: "fruit",
+      category: "Fruits and veggies",
+      description: "some lovely fruit",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      quantity: 1,
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request - expiry_date is required");
+      });
+  });
+  it("400: new items require a quantity", () => {
+    const newItem = {
+      name: "fruit",
+      category: "Fruits and veggies",
+      description: "some lovely fruit",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: "some date",
+      is_available: "true",
+    };
+    return request(app)
+      .post("/api/items")
+      .send(newItem)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request - quantity is required");
+        });
+   });
+});
+  
 describe("GET /api/items", () => {
   it("200: should respond with an array of item objects", () => {
     return request(app)
