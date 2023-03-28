@@ -15,7 +15,7 @@ exports.getItemById = (request, response, next) => {
 
  fetchItemById(_id)
     .then((item) => {
-        console.log(item)
+  
       response.status(200).send({ item });
     })
     .catch((err) => next(err));
