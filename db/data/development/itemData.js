@@ -8,7 +8,7 @@ module.exports = [
       latitude: 52.916668,
       longitude: -1.466667,
     },
-    expiry_date: "29/3/2023",
+    expiry_date: new Date("2023-03-29"),
     quantity: 1,
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679924952/grepww2o8mwrdebpkbsx.webp",
@@ -23,7 +23,7 @@ module.exports = [
       latitude: 53.39254,
       longitude: -2.58024,
     },
-    expiry_date: "29/3/2023",
+    expiry_date: new Date("2023-03-29"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925023/zncex1cjvxgyvrk4y3t5.jpg",
@@ -39,7 +39,7 @@ module.exports = [
       latitude: 53.40043,
       longitude: -2.978,
     },
-    expiry_date: "01/6/2024",
+    expiry_date: new Date("2024-06-01"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925696/f0h56vjq8jwwt5zlhnuu.jpg",
@@ -55,7 +55,7 @@ module.exports = [
       latitude: 53.40043,
       longitude: -2.978,
     },
-    expiry_date: "05/4/2023",
+    expiry_date: new Date("2023-04-05"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925938/ewum24uczpctzdmkpmgf.webp",
@@ -70,7 +70,7 @@ module.exports = [
       latitude: 53.40043,
       longitude: -2.978,
     },
-    expiry_date: "05/4/2026",
+    expiry_date: new Date("2024-04-05"),
     quantity: "6",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679926353/urquxb6x7wnrhco09imk.webp",
@@ -85,7 +85,7 @@ module.exports = [
       latitude: 53.40043,
       longitude: -2.978,
     },
-    expiry_date: "15/4/2023",
+    expiry_date: new Date("2023-04-15"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679926628/vkskauol7bsnsj0eyabe.jpg",
@@ -101,7 +101,7 @@ module.exports = [
       latitude: 53.39925,
       longitude: -2.98392,
     },
-    expiry_date: "15/4/2023",
+    expiry_date: new Date("2023-04-15"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679926929/mqwo0qco8hl6pb1do3ay.jpg",
@@ -117,7 +117,7 @@ module.exports = [
       latitude: 53.39925,
       longitude: -2.98392,
     },
-    expiry_date: "15/4/2023",
+    expiry_date: new Date("2023-04-15"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679927039/cyekiefwcavmmwvwygyr.jpg",
@@ -133,7 +133,7 @@ module.exports = [
       latitude: 53.39925,
       longitude: -2.98392,
     },
-    expiry_date: "07/4/2023",
+    expiry_date: new Date("2023-04-07"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679927223/uwcs5qcovlq6je1uwgvy.jpg",
@@ -149,7 +149,7 @@ module.exports = [
       latitude: 53.39925,
       longitude: -2.98392,
     },
-    expiry_date: "07/4/2024",
+    expiry_date: new Date("2023-04-07"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679927574/ppdsljx23zuh36axxayo.webp",
@@ -165,7 +165,7 @@ module.exports = [
       latitude: 53.39925,
       longitude: -2.98392,
     },
-    expiry_date: "07/4/2024",
+    expiry_date: new Date("2024-04-07"),
     quantity: "10",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679927693/zwxazmzrg8wv5goj8rwq.jpg",
@@ -181,7 +181,7 @@ module.exports = [
       latitude: 53.3985,
       longitude: -2.96886,
     },
-    expiry_date: "07/4/2024",
+    expiry_date: new Date("2024-04-07"),
     quantity: "12",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679928099/xzoxx6vbwz5wussokltg.jpg",
@@ -196,7 +196,7 @@ module.exports = [
       latitude: 53.3985,
       longitude: -2.96886,
     },
-    expiry_date: "07/4/2024",
+    expiry_date: new Date("2024-04-07"),
     quantity: "6",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679928214/vkc5in23w0yzuez3qzxn.jpg",
