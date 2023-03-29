@@ -1,15 +1,17 @@
 const express = require("express");
-// const { postUser, getUsers, getUser, getItems, getItem, postItem } = require("./controller.js")
-const { getItems, getItemById } = require("./controllers/itemsControllers")
 
-const { postItem } = require("./controllers/itemsControllers");
+const {
+  getItems,
+  getItemById,
+  postItem,
+} = require("./controllers/itemsControllers");
+const { getCategories } = require("./controllers/categoriesControllers");
 const {
   handlePathNotFound,
   customErrors,
   mongooseErrors,
   handle500Errors,
 } = require("./controllers/errorControllers.js");
-
 const {
   getUsers,
   getUser,
@@ -28,10 +30,11 @@ app.post("/api/users", postUser);
 
 app.get("/api/items", getItems);
 
-app.get("/api/items/:_id", getItemById)
+app.get("/api/categories", getCategories);
+
+app.get("/api/items/:_id", getItemById);
 
 app.post("/api/items", postItem);
-
 
 app.use(customErrors);
 app.use(mongooseErrors);

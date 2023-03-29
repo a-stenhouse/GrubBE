@@ -9,3 +9,7 @@ exports.fetchCategory = (name) => {
     }
   });
 };
+
+exports.fetchCategories = () => {
+  return Category.find();
+};
