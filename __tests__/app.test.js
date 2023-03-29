@@ -4,8 +4,20 @@ const seed = require("../db/seed/seed");
 const request = require("supertest");
 const app = require("../app");
 const { describe } = require("node:test");
+let token;
 
-beforeAll(() => seed(userData, categoryData, itemData));
+beforeAll(() =>
+  seed(userData, categoryData, itemData).then(() => {
+    const credentials = { username: "John34", password: "Bananas1995" };
+    request(app)
+      .post("/api/auth")
+      .send(credentials)
+      .expect(200)
+      .then(({ body }) => {
+        token = body.token;
+      });
+  })
+);
 
 afterAll(() => db.close());
 
@@ -188,6 +200,7 @@ describe("GET /api/items", () => {
   it("200: should respond with an array of item objects", () => {
     return request(app)
       .get("/api/items")
+      .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
         const { items } = body;
