@@ -1,8 +1,8 @@
 const express = require("express");
-
 const {
   getItems,
   getItemById,
+  deleteItem,
   postItem,
 } = require("./controllers/itemsControllers");
 const { getCategories } = require("./controllers/categoriesControllers");
@@ -29,6 +29,8 @@ app.get("/api/users", getUsers);
 app.post("/api/users", postUser);
 
 app.get("/api/items", getItems);
+
+app.delete("/api/items/:_id", deleteItem);
 
 app.get("/api/categories", getCategories);
 

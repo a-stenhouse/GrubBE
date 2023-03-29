@@ -1,10 +1,17 @@
 const {
   postNewItem,
+  removeItem,
   fetchItems,
   fetchItemById,
 } = require("../models/itemsModels");
 const { fetchUser } = require("../models/usersModels");
 const { fetchCategory } = require("../models/categoryModels");
+
+exports.getItems = (request, response, next) => {
+    fetchItems().then((items) => {
+        response.status(200).send({ items })
+    }).catch((err) => next(err));
+}
 
 exports.getItems = (request, response, next) => {
   fetchItems()
@@ -23,6 +30,13 @@ exports.getItemById = (request, response, next) => {
     })
     .catch(next);
 };
+
+exports.deleteItem = (request, response, next) => {
+    const { _id } = request.params;
+    removeItem(_id).then(() => {
+        response.sendStatus(204)
+    }).catch(next);
+}
 
 exports.postItem = (request, response, next) => {
   const newItem = request.body;
