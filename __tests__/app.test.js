@@ -222,30 +222,6 @@ describe("GET /api/items", () => {
   });
 });
 
-describe('DELETE /api/items/:_id', () => {
-  it('204: should respond with a 204 status "no content" when an item is deleted', () => {
-    return request(app)
-      .delete("/api/items/56cb91bdc3464f14678934ca")
-      .expect(204);
-  });
-  it("404: should respond with a message if passed an item id that does not exist", () => {
-    return request(app)
-      .delete("/api/items/56cb91bdc3464f14678934c3")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Item not found")
-      });
-  });
-  it('404: should respond with path not found if passed a valid but non existant path', () => {
-    return request(app)
-    .delete("/api/itemz/56cb91bdc3464f14678934ca")
-    .expect(404)
-    .then(({ body }) => {
-      expect(body.msg).toBe("Path not found")
-    });
-  });
-})
-
 describe("GET /api/items/:_id", () => {
   it("200: should respond with a single item object", () => {
     return request(app)
@@ -262,7 +238,7 @@ describe("GET /api/items/:_id", () => {
           category: expect.any(String),
           description: "ready to eat bananas",
           username: expect.any(String),
-          expiry_date: "29/3/2023",
+          expiry_date: "2023-03-28T00:00:00.000Z",
           quantity: 1,
           item_url:
             "https://res.cloudinary.com/dhirydfr8/image/upload/v1679924952/grepww2o8mwrdebpkbsx.webp",
@@ -281,6 +257,30 @@ describe("GET /api/items/:_id", () => {
   });
 });
 
+describe("DELETE /api/items/:_id", () => {
+  it('204: should respond with a 204 status "no content" when an item is deleted', () => {
+    return request(app)
+      .delete("/api/items/56cb91bdc3464f14678934ca")
+      .expect(204);
+  });
+  it("404: should respond with a message if passed an item id that does not exist", () => {
+    return request(app)
+      .delete("/api/items/56cb91bdc3464f14678934c3")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Item not found");
+      });
+  });
+  it("404: should respond with path not found if passed a valid but non existant path", () => {
+    return request(app)
+      .delete("/api/itemz/56cb91bdc3464f14678934ca")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Path not found");
+      });
+  });
+});
+
 describe("POST /api/items", () => {
   it("201: should respond with the newly created item object", () => {
     const newItem = {
@@ -289,7 +289,7 @@ describe("POST /api/items", () => {
       description: "some lovely bananas",
       username: "John34",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       is_available: "true",
       quantity: 1,
     };
@@ -303,7 +303,7 @@ describe("POST /api/items", () => {
           name: "bananas",
           description: "some lovely bananas",
           location: { latitude: 10, longitude: 10 },
-          expiry_date: "some date",
+          expiry_date: "2023-03-28T00:00:00.000Z",
           is_available: true,
           quantity: 1,
           category: expect.any(String),
@@ -320,7 +320,7 @@ describe("POST /api/items", () => {
       description: "some lovely apples",
       username: "John34",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "false",
     };
@@ -339,7 +339,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely carrots",
       username: "John34",
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
     };
@@ -362,7 +362,7 @@ describe("POST /api/items", () => {
       description: "some lovely carrots",
       superfluous: "this key is not required",
       username: "John34",
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
     };
@@ -382,7 +382,7 @@ describe("POST /api/items", () => {
       description: "some lovely bananas",
       username: "John",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
     };
@@ -402,7 +402,7 @@ describe("POST /api/items", () => {
       description: "some lovely bananas",
       username: "John34",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
     };
@@ -421,7 +421,7 @@ describe("POST /api/items", () => {
       description: "some lovely fruit",
       username: "John34",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
     };
@@ -460,7 +460,7 @@ describe("POST /api/items", () => {
       description: "some lovely fruit",
       username: "John34",
       location: { latitude: 10, longitude: 10 },
-      expiry_date: "some date",
+      expiry_date: new Date("2023-03-28"),
       is_available: "true",
     };
     return request(app)
