@@ -18,8 +18,8 @@ const itemSchema = new mongoose.Schema({
     longitude: Number,
   },
   expiry_date: {
-    type: Date
-    required: true
+    type: Date,
+    required: true,
   },
   quantity: { type: Number, required: true },
   item_url: String,
@@ -27,6 +27,5 @@ const itemSchema = new mongoose.Schema({
 });
 
 const Item = mongoose.model("item", itemSchema);
-
 
 module.exports = Item;
