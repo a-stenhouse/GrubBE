@@ -3,15 +3,14 @@ const passportJWT = require("passport-jwt");
 const crypto = require("crypto");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./db/User");
+const { passwordHasher } = require("./models/usersModels");
 const ExtractJWT = passportJWT.ExtractJwt;
 const JWTStrategy = passportJWT.Strategy;
 
 passport.use(
   new LocalStrategy((username, password, done) => {
     return User.findOne({ username }).then((user) => {
-      const hashedPassword = crypto
-        .pbkdf2Sync(password, user.salt, 310000, 32, "sha256")
-        .toString("hex");
+      const { hashedPassword } = passwordHasher(password, user.salt);
       if (user && user.password === hashedPassword) {
         done(null, { username }, { message: "Login successful" });
       } else {
