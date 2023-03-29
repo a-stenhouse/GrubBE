@@ -21,7 +21,7 @@ exports.mongooseErrors = (err, request, response, next) => {
 };
 
 exports.handle500Errors = (error, request, response, next) => {
-  console.log(error);
+  console.log(error, "<--- unknown server error");
   response.status(500).send({ msg: "Server Error" });
 };
 
