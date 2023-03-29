@@ -53,9 +53,6 @@ describe("GET /api/users/:username", () => {
         const { user } = body;
         expect(user).toEqual({
           username: "John34",
-          password:
-            "6f5dd1655e97bf25bc1e213946f1d44b872b3d120ef60df267770138395d7b9a",
-          salt: "5b62029b595ee89916c04dd77d104665",
           _id: expect.any(String),
           location: {
             latitude: 52.916668, // Portsmouth
@@ -64,6 +61,26 @@ describe("GET /api/users/:username", () => {
           contact: "07922286099",
           __v: 0,
         });
+      });
+  });
+  it("200: should not return the users password", () => {
+    return request(app)
+      .get("/api/users/John34")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).not.toHaveProperty("password");
+      });
+  });
+  it("200: should not return the users salt", () => {
+    return request(app)
+      .get("/api/users/John34")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).not.toHaveProperty("salt");
       });
   });
   it("401: should not allow users to access endpoint without being authorised", () => {

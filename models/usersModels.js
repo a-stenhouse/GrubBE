@@ -2,15 +2,19 @@ const User = require("../db/User.js");
 const crypto = require("crypto");
 
 const fetchUser = (username) => {
-  return User.findOne({ username }).then((user) => {
-    if (!user) {
-      return Promise.reject({
-        status: 404,
-        msg: "User not found",
-      });
-    }
-    return user;
-  });
+  return User.findOne({ username })
+    .lean()
+    .then((user) => {
+      if (!user) {
+        return Promise.reject({
+          status: 404,
+          msg: "User not found",
+        });
+      }
+      delete user.password;
+      delete user.salt;
+      return user;
+    });
 };
 
 const addUser = (newUserObj) => {
