@@ -53,7 +53,7 @@ The test script uses Jest.
 
 ### Live instance:
 
-A live instance of this backend is running on render and can be found [here](http://www.render.com).
+A live instance of this backend is running on render and can be found [here](https://grub-group-project.onrender.com)
 
 ## API Endpoints
 
