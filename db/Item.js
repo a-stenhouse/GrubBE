@@ -1,15 +1,17 @@
 const mongoose = require("mongoose");
 
 const itemSchema = new mongoose.Schema({
-  name: String,
+  name: { type: String, required: true },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
+    required: true,
   },
   description: String,
   username: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   location: {
     latitude: Number,
@@ -17,10 +19,11 @@ const itemSchema = new mongoose.Schema({
   },
   expiry_date: {
     type: Date
+    required: true
   },
-  quantity: Number,
+  quantity: { type: Number, required: true },
   item_url: String,
-  is_available: Boolean,
+  is_available: { type: Boolean, required: true },
 });
 
 const Item = mongoose.model("item", itemSchema);
