@@ -4,7 +4,14 @@ const passport = require("passport");
 
 require("./passport");
 
-const { postItem } = require("./controllers/itemsControllers");
+const {
+  getItems,
+  getItemById,
+  deleteItem,
+  postItem,
+} = require("./controllers/itemsControllers");
+const { getCategories } = require("./controllers/categoriesControllers");
+
 const {
   handlePathNotFound,
   customErrors,
@@ -12,7 +19,6 @@ const {
   handle500Errors,
 } = require("./controllers/errorControllers.js");
 
-const { getItems } = require("./controllers/itemsControllers");
 const {
   getUsers,
   getUser,
@@ -50,6 +56,12 @@ app.get(
   passport.authenticate("jwt", { session: false }),
   getItems
 );
+
+app.delete("/api/items/:_id", deleteItem);
+
+app.get("/api/categories", getCategories);
+
+app.get("/api/items/:_id", getItemById);
 
 app.post("/api/items", postItem);
 

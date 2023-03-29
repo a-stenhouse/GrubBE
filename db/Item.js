@@ -17,7 +17,10 @@ const itemSchema = new mongoose.Schema({
     latitude: Number,
     longitude: Number,
   },
-  expiry_date: { type: String, required: true },
+  expiry_date: {
+    type: Date,
+    required: true,
+  },
   quantity: { type: Number, required: true },
   item_url: String,
   is_available: { type: Boolean, required: true },
