@@ -7,7 +7,6 @@ exports.fetchItems = () => {
 exports.removeItem = (_id) => {
     return Item.findByIdAndDelete({ _id })
         .then((deletedItem) => {
-            console.log(deletedItem)
             if (!deletedItem) {
                 return Promise.reject({
                     status: 404,

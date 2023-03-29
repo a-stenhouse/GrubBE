@@ -235,4 +235,12 @@ describe('DELETE /api/items/:_id', () => {
         expect(body.msg).toBe("Item not found")
       });
   });
+  it('404: should respond with path not found if passed a valid but non existant path', () => {
+    return request(app)
+    .delete("/api/itemz/56cb91bdc3464f14678934ca")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Path not found")
+    });
+  });
 })
