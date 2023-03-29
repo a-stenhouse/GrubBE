@@ -1,4 +1,6 @@
 const express = require("express");
+// const { postUser, getUsers, getUser, getItems, getItem, postItem } = require("./controller.js")
+const { getItems, getItemById } = require("./controllers/itemsControllers")
 
 const { postItem } = require("./controllers/itemsControllers");
 const {
@@ -8,7 +10,6 @@ const {
   handle500Errors,
 } = require("./controllers/errorControllers.js");
 
-const { getItems } = require("./controllers/itemsControllers")
 const {
   getUsers,
   getUser,
@@ -26,6 +27,8 @@ app.get("/api/users", getUsers);
 app.post("/api/users", postUser);
 
 app.get("/api/items", getItems);
+
+app.get("/api/items/:_id", getItemById)
 
 app.post("/api/items", postItem);
 
