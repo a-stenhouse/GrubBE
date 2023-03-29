@@ -9,46 +9,36 @@ let token;
 beforeAll(() =>
   seed(userData, categoryData, itemData).then(() => {
     const credentials = { username: "John34", password: "Bananas1995" };
-    request(app)
+    return request(app)
       .post("/api/auth")
       .send(credentials)
       .expect(200)
       .then(({ body }) => {
         token = body.token;
+        return true;
       });
   })
 );
 
 afterAll(() => db.close());
 
-describe("GET /api/users", () => {
-  it("200: should return an array of users", () => {
+describe("POST /api/auth", () => {
+  it("401: should not authorize a user with an incorrect password", () => {
+    const credentials = { username: "John34", password: "incorrect password" };
     return request(app)
-      .get("/api/users")
-      .expect(200)
-      .then(({ body }) => {
-        const { users } = body;
-        expect(users).toBeInstanceOf(Array);
-        expect(users).toHaveLength(3);
-        users.forEach((user) => {
-          expect(user).toMatchObject({
-            location: expect.any(Object),
-            _id: expect.any(String),
-            username: expect.any(String),
-            password: expect.any(String),
-            salt: expect.any(String),
-            contact: expect.any(String),
-            __v: expect.any(Number),
-          });
-        });
+      .post("/api/auth")
+      .send(credentials)
+      .expect(401)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Incorrect username or password");
       });
   });
-  it("404: should return path not found if passed a valid but non-existant path", () => {
+  it("401: should not authorize a user if no credentials are provided", () => {
     return request(app)
-      .get("/api/notusers")
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Path not found");
+      .post("/api/auth")
+      .expect(401)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Missing credentials");
       });
   });
 });
@@ -56,28 +46,33 @@ describe("GET /api/users", () => {
 describe("GET /api/users/:username", () => {
   it("200: should respond with the user object with the correct keys and values", () => {
     return request(app)
-      .get("/api/users/Janet876")
+      .get("/api/users/John34")
+      .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
         const { user } = body;
         expect(user).toEqual({
-          username: "Janet876",
+          username: "John34",
           password:
-            "dffe4b88d705ab1518171786f4199105e0099aa62621613d6707f7d3b0c09e4c", //"Lancaster21",
-          salt: "cf1ecce6f08d5f583500d3aea18c494b",
+            "6f5dd1655e97bf25bc1e213946f1d44b872b3d120ef60df267770138395d7b9a",
+          salt: "5b62029b595ee89916c04dd77d104665",
           _id: expect.any(String),
           location: {
-            latitude: 50.805832, // Portsmouth
-            longitude: -1.087222,
+            latitude: 52.916668, // Portsmouth
+            longitude: -1.466667,
           },
-          contact: "07563421234",
+          contact: "07922286099",
           __v: 0,
         });
       });
   });
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    return request(app).get("/api/users/John34").expect(401);
+  });
   it("404: should respond with a msg if passed a user that does not exist", () => {
     return request(app)
       .get("/api/users/chocolate")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("User not found");
@@ -86,6 +81,7 @@ describe("GET /api/users/:username", () => {
   it('404: should respond with "Path not found" if passed a valid but non-existant path', () => {
     return request(app)
       .get("/api/usrs/Janet876")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Path not found");
@@ -225,9 +221,13 @@ describe("GET /api/items", () => {
         });
       });
   });
-  it("404: should respond with a 4040Path not found message if the path is invalid (ie mispelled)", () => {
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    return request(app).get("/api/items/notauthorized").expect(401);
+  });
+  it("404: should respond with a 404 Path not found message if the path is invalid (ie mispelled)", () => {
     return request(app)
       .get("/api/itemsjkdbgearjhgh3")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Path not found");
@@ -239,6 +239,7 @@ describe("GET /api/items/:_id", () => {
   it("200: should respond with a single item object", () => {
     return request(app)
       .get("/api/items/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
         expect(body.item).toEqual({
@@ -260,9 +261,13 @@ describe("GET /api/items/:_id", () => {
         });
       });
   });
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    return request(app).get("/api/items/56cb91bdc3222f14678934ca").expect(401);
+  });
   it("404: should respond with a 404 Not found error message if the passed _id is valid but non-existent", () => {
     return request(app)
       .get("/api/items/56cb91bdc3222f14678934ca")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Item not found");
@@ -274,11 +279,18 @@ describe("DELETE /api/items/:_id", () => {
   it('204: should respond with a 204 status "no content" when an item is deleted', () => {
     return request(app)
       .delete("/api/items/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
       .expect(204);
+  });
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    return request(app)
+      .delete("/api/items/56cb91bdc3464f14678934c3")
+      .expect(401);
   });
   it("404: should respond with a message if passed an item id that does not exist", () => {
     return request(app)
       .delete("/api/items/56cb91bdc3464f14678934c3")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Item not found");
@@ -287,6 +299,7 @@ describe("DELETE /api/items/:_id", () => {
   it("404: should respond with path not found if passed a valid but non existant path", () => {
     return request(app)
       .delete("/api/itemz/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Path not found");
@@ -308,6 +321,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(201)
       .then(({ body }) => {
@@ -339,6 +353,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(201)
       .then(({ body }) => {
@@ -358,6 +373,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(201)
       .then(({ body }) => {
@@ -381,12 +397,26 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(201)
       .then(({ body }) => {
         const { item } = body;
         expect(item).not.toHaveProperty("superfluous");
       });
+  });
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    const newItem = {
+      name: "bananas",
+      category: "Fruits and veggies",
+      description: "some lovely bananas",
+      username: "John34",
+      location: { latitude: 10, longitude: 10 },
+      expiry_date: new Date("2023-03-28"),
+      is_available: "true",
+      quantity: 1,
+    };
+    return request(app).post("/api/items").send(newItem).expect(401);
   });
   it("404: should respond with a 404 if username does not exist ", () => {
     const newItem = {
@@ -401,6 +431,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(404)
       .then(({ body }) => {
@@ -421,6 +452,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(404)
       .then(({ body }) => {
@@ -440,6 +472,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(400)
       .then(({ body }) => {
@@ -459,6 +492,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(400)
       .then(({ body }) => {
@@ -478,6 +512,7 @@ describe("POST /api/items", () => {
     };
     return request(app)
       .post("/api/items")
+      .set("Authorization", "Bearer " + token)
       .send(newItem)
       .expect(400)
       .then(({ body }) => {
@@ -491,6 +526,7 @@ describe("GET /api/categories", () => {
   it("200: should return a list of categories ", () => {
     return request(app)
       .get("/api/categories")
+      .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body: { categories } }) => {
         expect(categories).toHaveLength(8);
@@ -501,5 +537,8 @@ describe("GET /api/categories", () => {
           expect(category).toHaveProperty("__v", expect.any(Number));
         });
       });
+  });
+  it("401: should not allow users to access endpoint without being authorised", () => {
+    return request(app).get("/api/categories").expect(401);
   });
 });
