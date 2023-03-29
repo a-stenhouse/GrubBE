@@ -1,4 +1,8 @@
-const { postNewItem, fetchItems, fetchItemById } = require("../models/itemsModels");
+const {
+  postNewItem,
+  fetchItems,
+  fetchItemById,
+} = require("../models/itemsModels");
 const { fetchUser } = require("../models/usersModels");
 const { fetchCategory } = require("../models/categoryModels");
 
@@ -7,18 +11,17 @@ exports.getItems = (request, response, next) => {
     .then((items) => {
       response.status(200).send({ items });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 exports.getItemById = (request, response, next) => {
   const { _id } = request.params;
 
- fetchItemById(_id)
+  fetchItemById(_id)
     .then((item) => {
-  
       response.status(200).send({ item });
     })
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 exports.postItem = (request, response, next) => {
@@ -41,4 +44,3 @@ exports.postItem = (request, response, next) => {
     })
     .catch(next);
 };
-
