@@ -5,7 +5,7 @@
   "main": "listener.js",
   "scripts": {
     "test": "jest",
-    "start": "node listener.js",
+    "start": "nodemon listener.js",
     "seed": "NODE_ENV=dev node ./db/seed/run-seed.js"
   },
   "keywords": [],
@@ -26,7 +26,7 @@
     "nodemon": "^2.0.22",
     "supertest": "^6.3.3"
   },
-  "engines" : {
+  "engines": {
     "node": "^19.4.0"
   }
 }

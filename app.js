@@ -7,6 +7,8 @@ require("./passport");
 const {
   getItems,
   getItemById,
+  getItemsByLocation,
+  getItemsByArea,
   deleteItem,
   postItem,
 } = require("./controllers/itemsControllers");
@@ -19,13 +21,11 @@ const {
   handle500Errors,
 } = require("./controllers/errorControllers.js");
 
-const {
-  getUsers,
-  getUser,
-  postUser,
-} = require("./controllers/usersControllers.js");
+const { getUser, postUser } = require("./controllers/usersControllers.js");
 
 const app = express();
+
+const latLongRegex = "(-?\\d{1,3}.?\\d+)";
 
 app.use(express.json());
 
@@ -56,6 +56,18 @@ app.get(
   "/api/items",
   passport.authenticate("jwt", { session: false }),
   getItems
+);
+
+app.get(
+  `/api/items/:lat1${latLongRegex}/:long1${latLongRegex}/:lat2${latLongRegex}/:long2${latLongRegex}`,
+  passport.authenticate("jwt", { session: false }),
+  getItemsByArea
+);
+
+app.get(
+  `/api/items/:lat${latLongRegex}/:long${latLongRegex}`,
+  passport.authenticate("jwt", { session: false }),
+  getItemsByLocation
 );
 
 app.delete(
