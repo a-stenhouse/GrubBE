@@ -224,7 +224,7 @@ describe("GET /api/items", () => {
         items.forEach((item) => {
           expect(item).toMatchObject({
             name: expect.any(String),
-            category: expect.any(String),
+            category: expect.any(Object),
             description: expect.any(String),
             username: expect.any(String),
             location: {
@@ -451,7 +451,7 @@ describe("GET /api/items/:_id", () => {
           },
           _id: "56cb91bdc3464f14678934ca",
           name: "bananas",
-          category: expect.any(String),
+          category: expect.any(Object),
           description: "ready to eat bananas",
           username: expect.any(String),
           expiry_date: "2023-03-28T00:00:00.000Z",
@@ -461,6 +461,7 @@ describe("GET /api/items/:_id", () => {
           is_available: true,
           __v: 0,
         });
+        expect(body.item.category.name).toBe("Fruits and veggies");
       });
   });
   it("401: should not allow users to access endpoint without being authorised", () => {
