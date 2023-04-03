@@ -1,4 +1,5 @@
 const Item = require("../db/Item");
+const Category = require("../db/Category");
 const { at } = require("../db/data/test/categoryData");
 
 const coordinateCheck = (latitude, longitude) => {
@@ -14,13 +15,15 @@ exports.fetchItems = (page = 0, limit = 100) => {
   }
   page = Number(page);
   limit = Number(limit);
-  return Item.find().then((items) => {
-    const start = page * limit;
-    return {
-      total_items: items.length,
-      items: items.slice(start, start + limit),
-    };
-  });
+  return Item.find()
+    .populate({ path: "category", model: Category })
+    .then((items) => {
+      const start = page * limit;
+      return {
+        total_items: items.length,
+        items: items.slice(start, start + limit),
+      };
+    });
 };
 
 exports.fetchItemsByLocation = (
@@ -52,13 +55,15 @@ exports.fetchItemsByLocation = (
     {
       $sort: { distance: asc },
     },
-  ]).then((items) => {
-    const start = page * limit;
-    return {
-      total_items: items.length,
-      items: items.slice(start, start + limit),
-    };
-  });
+  ])
+    .then((items) => Category.populate(items, { path: "category" }))
+    .then((items) => {
+      const start = page * limit;
+      return {
+        total_items: items.length,
+        items: items.slice(start, start + limit),
+      };
+    });
 };
 
 exports.fetchItemsByArea = (lat1, long1, lat2, long2) => {
@@ -74,7 +79,7 @@ exports.fetchItemsByArea = (lat1, long1, lat2, long2) => {
         ],
       },
     },
-  });
+  }).populate({ path: "category", model: Category });
 };
 
 exports.removeItem = (_id) => {
@@ -91,15 +96,17 @@ exports.removeItem = (_id) => {
 };
 
 exports.fetchItemById = (_id) => {
-  return Item.findOne({ _id }).then((item) => {
-    if (!item) {
-      return Promise.reject({
-        status: 404,
-        msg: "Item not found",
-      });
-    }
-    return item;
-  });
+  return Item.findOne({ _id })
+    .populate({ path: "category", model: Category })
+    .then((item) => {
+      if (!item) {
+        return Promise.reject({
+          status: 404,
+          msg: "Item not found",
+        });
+      }
+      return item;
+    });
 };
 
 exports.postNewItem = (newItem) => {
