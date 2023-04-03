@@ -484,6 +484,34 @@ describe("GET /api/items/:_id", () => {
   });
 });
 
+describe("PATCH /api/items/:_id", () => {
+  it("200: should toggle the availability of the item and return the new availability", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body: { is_available } }) => {
+        expect(is_available).toBe(false);
+      });
+  });
+
+  it("401: should only allow an authorised user to toggle availability", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc3464f14678934ca")
+      .expect(401);
+  });
+
+  it("404: should return an error if the item is not found", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc4464f14678934ca")
+      .set("Authorization", "Bearer " + token)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Item not found");
+      });
+  });
+});
+
 describe("DELETE /api/items/:_id", () => {
   it('204: should respond with a 204 status "no content" when an item is deleted', () => {
     return request(app)

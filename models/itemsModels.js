@@ -10,6 +10,19 @@ const coordinateCheck = (latitude, longitude) => {
   return true;
 };
 
+exports.invertAvailability = (_id) => {
+  return Item.findOne({ _id })
+    .then((item) => {
+      if (item) {
+        item.is_available = !item.is_available;
+        return item.save();
+      } else {
+        return Promise.reject({ status: 404, msg: "Item not found" });
+      }
+    })
+    .then((item) => item.is_available);
+};
+
 exports.fetchItems = (page = 0, limit = 100) => {
   if (isNaN(Number(page)) || isNaN(Number(limit))) {
     return Promise.reject({ status: 400, msg: "Invalid query" });

@@ -89,6 +89,8 @@ This end point accepts the following queries:
 **GET (/api/items/:\_id)** - Returns the details of a single item  
 **GET (/api/categories)** - Returns an array of categories
 
+**PATCH (/api/items/:\_id)** - Toggles the availability of the item
+
 **DELETE (/api/items/:\_id)** - Deletes the item with corresponding \_id
 
 **POST (/api/auth)** - POST used for authentication  

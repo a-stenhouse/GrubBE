@@ -11,6 +11,7 @@ const {
   getItemsByArea,
   deleteItem,
   postItem,
+  toggleItem,
 } = require("./controllers/itemsControllers");
 const { getCategories } = require("./controllers/categoriesControllers");
 
@@ -93,6 +94,12 @@ app.get(
   "/api/items/:_id",
   passport.authenticate("jwt", { session: false }),
   getItemById
+);
+
+app.patch(
+  "/api/items/:_id",
+  passport.authenticate("jwt", { session: false }),
+  toggleItem
 );
 
 app.post(

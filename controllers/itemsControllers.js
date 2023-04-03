@@ -5,6 +5,7 @@ const {
   fetchItemById,
   fetchItemsByLocation,
   fetchItemsByArea,
+  invertAvailability,
 } = require("../models/itemsModels");
 const { fetchUser } = require("../models/usersModels");
 const { fetchCategory } = require("../models/categoryModels");
@@ -14,6 +15,15 @@ exports.getItems = (request, response, next) => {
   fetchItems(page, limit)
     .then((items) => {
       response.status(200).send(items);
+    })
+    .catch(next);
+};
+
+exports.toggleItem = (request, response, next) => {
+  const { _id } = request.params;
+  invertAvailability(_id)
+    .then((is_available) => {
+      response.status(200).send({ is_available });
     })
     .catch(next);
 };
