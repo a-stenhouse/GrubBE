@@ -71,13 +71,13 @@ Use this endpoint to create a new user account. Requires the following parameter
 The following endpoints are available to authenticated requests:
 
 **GET (/api/users/:username)** - Returns a users details (excluding password and salt)  
-**GET (/api/items)** - Returns an array of items  
+**GET (/api/items)** - Returns a JSON with an array of items and total_items (the total number of items in the container)  
 This end point accepts the following queries:
 
 - limit - the maximum number of items to return (defaults to 100)
 - page - the page to show, defaults to 0
 
-**GET (/api/items/:lat/:long)** - Return an array of items within 5 miles of the lat/long and includes a distance field (in meters)  
+**GET (/api/items/:lat/:long)** - Return a JSON with an array of items within 5 miles of the lat/long and includes a distance field (in meters) and toal_items (the total number of items that fall within the range)  
 This end point accepts the following queries:
 
 - range - (in meters) defaults to 8 statue miles

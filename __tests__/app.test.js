@@ -216,10 +216,11 @@ describe("GET /api/items", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
 
         expect(items).toBeInstanceOf(Object);
         expect(items).toHaveLength(4);
+        expect(total_items).toBe(4);
         items.forEach((item) => {
           expect(item).toMatchObject({
             name: expect.any(String),
@@ -244,8 +245,9 @@ describe("GET /api/items", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(2);
+        expect(total_items).toBe(4);
       });
   });
   it("200: should accept a page query and return the correct page", () => {
@@ -254,8 +256,9 @@ describe("GET /api/items", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(1);
+        expect(total_items).toBe(4);
         expect(items[0].name).toBe("Beer");
         expect(items[0].description).toBe("6 pack of lager");
       });
@@ -290,8 +293,9 @@ describe("GET: /api/items/:lat/:long", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(2);
+        expect(total_items).toBe(2);
         expect(items[0].name).toBe("Salmon");
         expect(items[1].name).toBe("Beer");
       });
@@ -302,8 +306,9 @@ describe("GET: /api/items/:lat/:long", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(3);
+        expect(total_items).toBe(3);
         expect(items[0].name).toBe("Salmon");
         expect(items[1].name).toBe("Beer");
         expect(items[2].name).toBe("Bread");
@@ -315,8 +320,9 @@ describe("GET: /api/items/:lat/:long", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(2);
+        expect(total_items).toBe(2);
         expect(items[0].name).toBe("Beer");
         expect(items[1].name).toBe("Salmon");
       });
@@ -327,8 +333,9 @@ describe("GET: /api/items/:lat/:long", () => {
       .set("Authorization", "Bearer " + token)
       .expect(200)
       .then(({ body }) => {
-        const { items } = body;
+        const { items, total_items } = body;
         expect(items).toHaveLength(1);
+        expect(total_items).toBe(3);
         expect(items[0].name).toBe("Bread");
       });
   });

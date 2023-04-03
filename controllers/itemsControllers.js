@@ -13,7 +13,7 @@ exports.getItems = (request, response, next) => {
   const { page, limit } = request.query;
   fetchItems(page, limit)
     .then((items) => {
-      response.status(200).send({ items });
+      response.status(200).send(items);
     })
     .catch(next);
 };
@@ -34,7 +34,7 @@ exports.getItemsByLocation = (request, response, next) => {
   const asc = request.query.desc ? -1 : 1;
   fetchItemsByLocation(lat, long, range, asc, page, limit)
     .then((items) => {
-      response.status(200).send({ items });
+      response.status(200).send(items);
     })
     .catch(next);
 };
