@@ -59,12 +59,12 @@ exports.deleteItem = (request, response, next) => {
 
 exports.postItem = (request, response, next) => {
   const newItem = request.body;
-  return fetchUser(newItem.username)
+  return fetchUser(newItem.user)
     .then((user) => {
       return Promise.all([user, fetchCategory(newItem.category)]);
     })
     .then((userCategory) => {
-      newItem.username = userCategory[0]._id;
+      newItem.user = userCategory[0]._id;
       newItem.category = userCategory[1]._id;
       newItem.is_available = true;
       if (!newItem.location) {

@@ -8,7 +8,7 @@ const itemSchema = new mongoose.Schema({
     required: true,
   },
   description: String,
-  username: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,

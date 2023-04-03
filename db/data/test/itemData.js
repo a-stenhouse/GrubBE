@@ -7,7 +7,7 @@ module.exports = [
     name: "bananas",
     category: "Fruits and veggies",
     description: "ready to eat bananas",
-    username: "John34",
+    user: "John34",
     location: {
       type: "Point",
       coordinates: [-1.466667, 52.916668],
@@ -23,7 +23,7 @@ module.exports = [
     name: "Salmon",
     category: "Meat and Fish",
     description: "2 salmon fillets",
-    username: "Mike20",
+    user: "Mike20",
     location: {
       type: "Point",
       coordinates: [-2.58024, 53.39254],
@@ -38,7 +38,7 @@ module.exports = [
     name: "Bread",
     category: "Grains",
     description: "2 loaves of bread",
-    username: "Mike20",
+    user: "Mike20",
     location: {
       type: "Point",
       coordinates: [-2.67249, 53.35278],
@@ -53,7 +53,7 @@ module.exports = [
     name: "Beer",
     category: "Beverages",
     description: "6 pack of lager",
-    username: "Mike20",
+    user: "Mike20",
     location: {
       type: "Point",
       coordinates: [-2.5274, 53.37105],

@@ -3,7 +3,7 @@ module.exports = [
     name: "bananas",
     category: "Fruits and veggies",
     description: "ready to eat bananas",
-    username: "John34",
+    user: "John34",
     location: {
       type: "Point",
       coordinates: [-1.466667, 52.916668],
@@ -18,7 +18,7 @@ module.exports = [
     name: "Salmon",
     category: "Meat and Fish",
     description: "2 salmon fillets",
-    username: "Mike20",
+    user: "Mike20",
     location: {
       type: "Point",
       coordinates: [-2.58024, 53.39254],
@@ -34,7 +34,7 @@ module.exports = [
     category: "Cereals",
     description:
       "Half a pack of weetabix, I can't stand them!! Thought I would like them but turns out they taste like cardboard. Can't believe I managed to even eat half the pack!!",
-    username: "HungryToad",
+    user: "HungryToad",
     location: {
       type: "Point",
       coordinates: [-2.978, 53.40043],
@@ -50,7 +50,7 @@ module.exports = [
     category: "Dairy products",
     description:
       "About 3/4 left. Purchased this for my chilli but only used a few spoonfuls, don't think I'll be using anymore and its only a day old!",
-    username: "HungryToad",
+    user: "HungryToad",
     location: {
       type: "Point",
       coordinates: [-2.978, 53.40043],
@@ -65,7 +65,7 @@ module.exports = [
     name: "Irn Bru",
     category: "Beverages",
     description: "Made in Scotland from girders.",
-    username: "HungryToad",
+    user: "HungryToad",
     location: {
       type: "Point",
       coordinates: [-2.978, 53.40043],
@@ -80,7 +80,7 @@ module.exports = [
     name: "Potatoes",
     category: "Fruits and veggies",
     description: "Half a bag of Albert Bartletts, still fresh!",
-    username: "HungryToad",
+    user: "HungryToad",
     location: {
       type: "Point",
       coordinates: [-2.978, 53.40043],
@@ -96,7 +96,7 @@ module.exports = [
     category: "Fruits and veggies",
     description:
       "Bag of unused onions. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
-    username: "PlanetSaver12",
+    user: "PlanetSaver12",
     location: {
       type: "Point",
       coordinates: [-2.98392, 53.39925],
@@ -112,7 +112,7 @@ module.exports = [
     category: "Fruits and veggies",
     description:
       "Bag of unused carrots. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
-    username: "PlanetSaver12",
+    user: "PlanetSaver12",
     location: {
       type: "Point",
       coordinates: [-2.98392, 53.39925],
@@ -128,7 +128,7 @@ module.exports = [
     category: "Fruits and veggies",
     description:
       "Bag of half used Apples. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
-    username: "PlanetSaver12",
+    user: "PlanetSaver12",
     location: {
       type: "Point",
       coordinates: [-2.98392, 53.39925],
@@ -144,7 +144,7 @@ module.exports = [
     category: "Grains",
     description:
       "Plain flour, unopened. I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
-    username: "PlanetSaver12",
+    user: "PlanetSaver12",
     location: {
       type: "Point",
       coordinates: [-2.98392, 53.39925],
@@ -160,7 +160,7 @@ module.exports = [
     category: "Snacks",
     description:
       "Assorted chocolate bars, unopened! I'm leave town, had enough of this place. Grab some free food. Also see my other stuff!",
-    username: "PlanetSaver12",
+    user: "PlanetSaver12",
     location: {
       type: "Point",
       coordinates: [-2.98392, 53.39925],
@@ -176,7 +176,7 @@ module.exports = [
     category: "Dairy products",
     description:
       "My hens won't stop laying eggs!!!! I usually have half a dozen available each day. Free to a good home and guaranteed free range!",
-    username: "FoodLover2334",
+    user: "FoodLover2334",
     location: {
       type: "Point",
       coordinates: [-2.96886, 53.3985],
@@ -191,7 +191,7 @@ module.exports = [
     name: "Meringue",
     category: "Dairy products",
     description: "Make these fresh each week, from my own hens eggs.",
-    username: "FoodLover2334",
+    user: "FoodLover2334",
     location: {
       type: "Point",
       coordinates: [-2.96886, 53.3985],

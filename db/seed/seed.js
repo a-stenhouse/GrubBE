@@ -15,7 +15,7 @@ function seed(userData, categoryData, itemData) {
       const newItems = itemData.map((item) => {
         const promises = [];
         promises.push(
-          User.find({ username: item.username }).then((users) => users[0]._id)
+          User.find({ username: item.user }).then((users) => users[0]._id)
         );
 
         promises.push(
@@ -24,7 +24,7 @@ function seed(userData, categoryData, itemData) {
           )
         );
         return Promise.all(promises).then((result) => {
-          item.username = result[0];
+          item.user = result[0];
           item.category = result[1];
           return new Item(item);
         });

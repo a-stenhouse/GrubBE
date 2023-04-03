@@ -1,5 +1,6 @@
 const Item = require("../db/Item");
 const Category = require("../db/Category");
+const User = require("../db/User");
 const { at } = require("../db/data/test/categoryData");
 
 const coordinateCheck = (latitude, longitude) => {
@@ -17,6 +18,7 @@ exports.fetchItems = (page = 0, limit = 100) => {
   limit = Number(limit);
   return Item.find()
     .populate({ path: "category", model: Category })
+    .populate({ path: "user", select: "username contact", model: User })
     .then((items) => {
       const start = page * limit;
       return {
@@ -57,6 +59,9 @@ exports.fetchItemsByLocation = (
     },
   ])
     .then((items) => Category.populate(items, { path: "category" }))
+    .then((items) =>
+      User.populate(items, { path: "user", select: "username contact" })
+    )
     .then((items) => {
       const start = page * limit;
       return {
@@ -79,7 +84,9 @@ exports.fetchItemsByArea = (lat1, long1, lat2, long2) => {
         ],
       },
     },
-  }).populate({ path: "category", model: Category });
+  })
+    .populate({ path: "category", model: Category })
+    .populate({ path: "user", select: "username contact", model: User });
 };
 
 exports.removeItem = (_id) => {
@@ -98,6 +105,7 @@ exports.removeItem = (_id) => {
 exports.fetchItemById = (_id) => {
   return Item.findOne({ _id })
     .populate({ path: "category", model: Category })
+    .populate({ path: "user", select: "username contact", model: User })
     .then((item) => {
       if (!item) {
         return Promise.reject({
