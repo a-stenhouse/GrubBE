@@ -14,8 +14,13 @@ const itemSchema = new mongoose.Schema({
     required: true,
   },
   location: {
-    latitude: Number,
-    longitude: Number,
+    type: {
+      type: String,
+      enum: ["Point"],
+    },
+    coordinates: {
+      type: [Number],
+    },
   },
   expiry_date: {
     type: Date,
@@ -25,6 +30,8 @@ const itemSchema = new mongoose.Schema({
   item_url: String,
   is_available: { type: Boolean, required: true },
 });
+
+itemSchema.index({ location: "2dsphere" });
 
 const Item = mongoose.model("item", itemSchema);
 

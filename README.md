@@ -72,6 +72,20 @@ The following endpoints are available to authenticated requests:
 
 **GET (/api/users/:username)** - Returns a users details (excluding password and salt)  
 **GET (/api/items)** - Returns an array of items  
+This end point accepts the following queries:
+
+- limit - the maximum number of items to return (defaults to 100)
+- page - the page to show, defaults to 0
+
+**GET (/api/items/:lat/:long)** - Return an array of items within 5 miles of the lat/long and includes a distance field (in meters)  
+This end point accepts the following queries:
+
+- range - (in meters) defaults to 8 statue miles
+- desc - defaults to false (items are returned in ascending order)
+- limit - the maximum number of items to return (defaults to 100)
+- page - the page to show, defaults to 0
+
+**GET (/api/items/:lat1/:long1/:lat2/:long2)** Returns an array of items within the region bounded by the bottom left (lat1/long1) and top right (lat2/long2) co-ordinates  
 **GET (/api/items/:\_id)** - Returns the details of a single item  
 **GET (/api/categories)** - Returns an array of categories
 

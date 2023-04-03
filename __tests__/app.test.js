@@ -55,8 +55,8 @@ describe("GET /api/users/:username", () => {
           username: "John34",
           _id: expect.any(String),
           location: {
-            latitude: 52.916668, // Portsmouth
-            longitude: -1.466667,
+            type: "Point",
+            coordinates: [-1.466667, 52.916668],
           },
           contact: "07922286099",
           __v: 0,
@@ -112,8 +112,8 @@ describe("POST /api/users", () => {
       username: "Jake",
       password: "Mango1998",
       location: {
-        latitude: 52.916668, // Derby
-        longitude: -1.466667,
+        type: "Point",
+        coordinates: [-1.466667, 52.916668],
       },
       contact: "07934567890",
     };
@@ -130,8 +130,8 @@ describe("POST /api/users", () => {
           password: expect.any(String),
           salt: expect.any(String),
           location: {
-            latitude: 52.916668, // Derby
-            longitude: -1.466667,
+            type: "Point",
+            coordinates: [-1.466667, 52.916668],
           },
           contact: "07934567890",
         });
@@ -143,8 +143,8 @@ describe("POST /api/users", () => {
       username: "David",
       password: "Mango1998",
       location: {
-        latitude: 52.916668, // Derby
-        longitude: -1.466667,
+        type: "Point",
+        coordinates: [-1.466667, 52.916668],
       },
       contact: "07934567890",
     };
@@ -162,8 +162,8 @@ describe("POST /api/users", () => {
           password: expect.any(String),
           salt: expect.any(String),
           location: {
-            latitude: 52.916668, // Derby
-            longitude: -1.466667,
+            type: "Point",
+            coordinates: [-1.466667, 52.916668],
           },
           contact: "07934567890",
         });
@@ -174,8 +174,8 @@ describe("POST /api/users", () => {
       username: "David",
       password: "bluepeter",
       location: {
-        latitude: 52.916668, // Derby
-        longitude: -1.466667,
+        type: "Point",
+        coordinates: [-1.466667, 52.916668],
       },
       contact: "07934567865",
     };
@@ -193,8 +193,8 @@ describe("POST /api/users", () => {
       username: "Alex",
       password: "bluepeter",
       location: {
-        latitude: 52.916668, // Derby
-        longitude: -1.466667,
+        type: "Point",
+        coordinates: [-1.466667, 52.916668],
       },
       contact: "07934567865",
     };
@@ -219,7 +219,7 @@ describe("GET /api/items", () => {
         const { items } = body;
 
         expect(items).toBeInstanceOf(Object);
-        expect(items).toHaveLength(2);
+        expect(items).toHaveLength(4);
         items.forEach((item) => {
           expect(item).toMatchObject({
             name: expect.any(String),
@@ -227,8 +227,8 @@ describe("GET /api/items", () => {
             description: expect.any(String),
             username: expect.any(String),
             location: {
-              latitude: expect.any(Number),
-              longitude: expect.any(Number),
+              type: "Point",
+              coordinates: [expect.any(Number), expect.any(Number)],
             },
             expiry_date: expect.any(String),
             quantity: expect.any(Number),
@@ -236,6 +236,37 @@ describe("GET /api/items", () => {
             is_available: expect.any(Boolean),
           });
         });
+      });
+  });
+  it("200: should accept a limit query and return the correct number of items", () => {
+    return request(app)
+      .get("/api/items?limit=2")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(2);
+      });
+  });
+  it("200: should accept a page query and return the correct page", () => {
+    return request(app)
+      .get("/api/items?limit=3&page=1")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(1);
+        expect(items[0].name).toBe("Beer");
+        expect(items[0].description).toBe("6 pack of lager");
+      });
+  });
+  it("400: should not accept a limit that is not a number", () => {
+    return request(app)
+      .get("/api/items?limit=two")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid query");
       });
   });
   it("401: should not allow users to access endpoint without being authorised", () => {
@@ -252,6 +283,153 @@ describe("GET /api/items", () => {
   });
 });
 
+describe("GET: /api/items/:lat/:long", () => {
+  it("200: should respond with a list of items sorted by distance, nearest first within 5 miles of location", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(2);
+        expect(items[0].name).toBe("Salmon");
+        expect(items[1].name).toBe("Beer");
+      });
+  });
+  it("200: should accept a range query and return items within that range of the location", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?range=10500")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(3);
+        expect(items[0].name).toBe("Salmon");
+        expect(items[1].name).toBe("Beer");
+        expect(items[2].name).toBe("Bread");
+      });
+  });
+  it("200: should accept a desc query and return items furtherst away first", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?desc=true")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(2);
+        expect(items[0].name).toBe("Beer");
+        expect(items[1].name).toBe("Salmon");
+      });
+  });
+  it("200: should accept page and limit queries and return the correct items", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?range=10500&limit=2&page=1")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body }) => {
+        const { items } = body;
+        expect(items).toHaveLength(1);
+        expect(items[0].name).toBe("Bread");
+      });
+  });
+  it("400: should return an invalid latitude when latitude is out of bounds", () => {
+    return request(app)
+      .get("/api/items/153.41789/-2.56516")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+  it("400: should return an invalid longitude when longitude is out of bounds", () => {
+    return request(app)
+      .get("/api/items/53.41789/-200.56516")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+  it("400: should only accept numbers for limit queries", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?limit=one")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid query");
+      });
+  });
+  it("400: should only accept numbers for page queries", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?limit=1&page=one")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid query");
+      });
+  });
+  it("400: should only accept numbers for range queries", () => {
+    return request(app)
+      .get("/api/items/53.41789/-2.56516?range=1mile")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid query");
+      });
+  });
+});
+
+describe("GET: /api/items/:lat1/:long1/:lat2/:long2", () => {
+  it("200: should respond with an array of item objects that are within the bounds of the box", () => {
+    return request(app)
+      .get("/api/items/53.33548/-2.69983/53.42214/-2.49602")
+      .set("Authorization", "Bearer " + token)
+      .expect(200)
+      .then(({ body: { items } }) => {
+        expect(items).toHaveLength(3);
+        expect(items[0].name).toBe("Salmon");
+        expect(items[1].name).toBe("Bread");
+        expect(items[2].name).toBe("Beer");
+      });
+  });
+  it("400: should return out of bound if first coordinate is no valid", () => {
+    return request(app)
+      .get("/api/items/153.33548/-2.69983/53.42214/-2.49602")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+  it("400: should return out of bound if second coordinate is no valid", () => {
+    return request(app)
+      .get("/api/items/53.33548/-200.69983/53.42214/-2.49602")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+  it("400: should return out of bound if third coordinate is no valid", () => {
+    return request(app)
+      .get("/api/items/53.33548/-2.69983/153.42214/-2.49602")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+  it("400: should return out of bound if fourth coordinate is no valid", () => {
+    return request(app)
+      .get("/api/items/53.33548/-2.69983/53.42214/-200.49602")
+      .set("Authorization", "Bearer " + token)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Coordinate out of bounds");
+      });
+  });
+});
+
 describe("GET /api/items/:_id", () => {
   it("200: should respond with a single item object", () => {
     return request(app)
@@ -261,8 +439,8 @@ describe("GET /api/items/:_id", () => {
       .then(({ body }) => {
         expect(body.item).toEqual({
           location: {
-            latitude: 52.916668,
-            longitude: -1.466667,
+            type: "Point",
+            coordinates: [-1.466667, 52.916668],
           },
           _id: "56cb91bdc3464f14678934ca",
           name: "bananas",
@@ -331,7 +509,10 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely bananas",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: {
+        type: "Point",
+        coordinates: [10, 10],
+      },
       expiry_date: new Date("2023-03-28"),
       is_available: "true",
       quantity: 1,
@@ -346,7 +527,10 @@ describe("POST /api/items", () => {
         expect(item).toEqual({
           name: "bananas",
           description: "some lovely bananas",
-          location: { latitude: 10, longitude: 10 },
+          location: {
+            type: "Point",
+            coordinates: [10, 10],
+          },
           expiry_date: "2023-03-28T00:00:00.000Z",
           is_available: true,
           quantity: 1,
@@ -363,7 +547,10 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely apples",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: {
+        type: "Point",
+        coordinates: [10, 10],
+      },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "false",
@@ -396,8 +583,8 @@ describe("POST /api/items", () => {
       .then(({ body }) => {
         const { item } = body;
         expect(item.location).toEqual({
-          latitude: 52.916668,
-          longitude: -1.466667,
+          type: "Point",
+          coordinates: [-1.466667, 52.916668],
         });
       });
   });
@@ -428,7 +615,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely bananas",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       is_available: "true",
       quantity: 1,
@@ -441,7 +628,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely bananas",
       username: "John",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
@@ -462,7 +649,7 @@ describe("POST /api/items", () => {
       category: "Fruit and veggies",
       description: "some lovely bananas",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
@@ -482,7 +669,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely fruit",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
@@ -503,7 +690,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely fruit",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       quantity: 1,
       is_available: "true",
     };
@@ -523,7 +710,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely fruit",
       username: "John34",
-      location: { latitude: 10, longitude: 10 },
+      location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       is_available: "true",
     };

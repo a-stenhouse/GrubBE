@@ -9,10 +9,10 @@ module.exports = [
     description: "ready to eat bananas",
     username: "John34",
     location: {
-      latitude: 52.916668,
-      longitude: -1.466667,
+      type: "Point",
+      coordinates: [-1.466667, 52.916668],
     },
-    expiry_date: new Date('2023-03-28'),
+    expiry_date: new Date("2023-03-28"),
     quantity: 1,
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679924952/grepww2o8mwrdebpkbsx.webp",
@@ -25,10 +25,40 @@ module.exports = [
     description: "2 salmon fillets",
     username: "Mike20",
     location: {
-      latitude: 53.39254,
-      longitude: -2.58024,
+      type: "Point",
+      coordinates: [-2.58024, 53.39254],
     },
-    expiry_date: new Date('2023-03-27'),
+    expiry_date: new Date("2023-03-27"),
+    quantity: "1",
+    item_url:
+      "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925023/zncex1cjvxgyvrk4y3t5.jpg",
+    is_available: "true",
+  },
+  {
+    name: "Bread",
+    category: "Grains",
+    description: "2 loaves of bread",
+    username: "Mike20",
+    location: {
+      type: "Point",
+      coordinates: [-2.67249, 53.35278],
+    },
+    expiry_date: new Date("2023-03-27"),
+    quantity: "1",
+    item_url:
+      "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925023/zncex1cjvxgyvrk4y3t5.jpg",
+    is_available: "true",
+  },
+  {
+    name: "Beer",
+    category: "Beverages",
+    description: "6 pack of lager",
+    username: "Mike20",
+    location: {
+      type: "Point",
+      coordinates: [-2.5274, 53.37105],
+    },
+    expiry_date: new Date("2023-03-27"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679925023/zncex1cjvxgyvrk4y3t5.jpg",

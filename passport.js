@@ -12,7 +12,7 @@ passport.use(
     return User.findOne({ username }).then((user) => {
       const { hashedPassword } = passwordHasher(password, user.salt);
       if (user && user.password === hashedPassword) {
-        done(null, { username }, { message: "Login successful" });
+        done(null, { user }, { message: "Login successful" });
       } else {
         done(null, false, { message: "Incorrect username or password" });
       }
