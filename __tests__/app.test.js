@@ -226,7 +226,7 @@ describe("GET /api/items", () => {
             name: expect.any(String),
             category: expect.any(Object),
             description: expect.any(String),
-            username: expect.any(String),
+            user: expect.any(Object),
             location: {
               type: "Point",
               coordinates: [expect.any(Number), expect.any(Number)],
@@ -235,6 +235,10 @@ describe("GET /api/items", () => {
             quantity: expect.any(Number),
             item_url: expect.any(String),
             is_available: expect.any(Boolean),
+          });
+          expect(item.user).toMatchObject({
+            username: expect.any(String),
+            contact: expect.any(String),
           });
         });
       });
@@ -453,7 +457,7 @@ describe("GET /api/items/:_id", () => {
           name: "bananas",
           category: expect.any(Object),
           description: "ready to eat bananas",
-          username: expect.any(String),
+          user: expect.any(Object),
           expiry_date: "2023-03-28T00:00:00.000Z",
           quantity: 1,
           item_url:
@@ -462,6 +466,8 @@ describe("GET /api/items/:_id", () => {
           __v: 0,
         });
         expect(body.item.category.name).toBe("Fruits and veggies");
+        expect(body.item.user.username).toBe("John34");
+        expect(body.item.user.contact).toBe("07922286099");
       });
   });
   it("401: should not allow users to access endpoint without being authorised", () => {
@@ -516,7 +522,7 @@ describe("POST /api/items", () => {
       name: "bananas",
       category: "Fruits and veggies",
       description: "some lovely bananas",
-      username: "John34",
+      user: "John34",
       location: {
         type: "Point",
         coordinates: [10, 10],
@@ -543,7 +549,7 @@ describe("POST /api/items", () => {
           is_available: true,
           quantity: 1,
           category: expect.any(String),
-          username: expect.any(String),
+          user: expect.any(String),
           _id: expect.any(String),
           __v: expect.any(Number),
         });
@@ -554,7 +560,7 @@ describe("POST /api/items", () => {
       name: "apples",
       category: "Fruits and veggies",
       description: "some lovely apples",
-      username: "John34",
+      user: "John34",
       location: {
         type: "Point",
         coordinates: [10, 10],
@@ -578,7 +584,7 @@ describe("POST /api/items", () => {
       name: "carrots",
       category: "Fruits and veggies",
       description: "some lovely carrots",
-      username: "John34",
+      user: "John34",
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
@@ -602,7 +608,7 @@ describe("POST /api/items", () => {
       category: "Fruits and veggies",
       description: "some lovely carrots",
       superfluous: "this key is not required",
-      username: "John34",
+      user: "John34",
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
       is_available: "true",
@@ -622,7 +628,7 @@ describe("POST /api/items", () => {
       name: "bananas",
       category: "Fruits and veggies",
       description: "some lovely bananas",
-      username: "John34",
+      user: "John34",
       location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       is_available: "true",
@@ -635,7 +641,7 @@ describe("POST /api/items", () => {
       name: "bananas",
       category: "Fruits and veggies",
       description: "some lovely bananas",
-      username: "John",
+      user: "John",
       location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
@@ -656,7 +662,7 @@ describe("POST /api/items", () => {
       name: "bananas",
       category: "Fruit and veggies",
       description: "some lovely bananas",
-      username: "John34",
+      user: "John34",
       location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
@@ -676,7 +682,7 @@ describe("POST /api/items", () => {
     const newItem = {
       category: "Fruits and veggies",
       description: "some lovely fruit",
-      username: "John34",
+      user: "John34",
       location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       quantity: 1,
@@ -697,7 +703,7 @@ describe("POST /api/items", () => {
       name: "fruit",
       category: "Fruits and veggies",
       description: "some lovely fruit",
-      username: "John34",
+      user: "John34",
       location: { type: "Point", coordinates: [10, 10] },
       quantity: 1,
       is_available: "true",
@@ -717,7 +723,7 @@ describe("POST /api/items", () => {
       name: "fruit",
       category: "Fruits and veggies",
       description: "some lovely fruit",
-      username: "John34",
+      user: "John34",
       location: { type: "Point", coordinates: [10, 10] },
       expiry_date: new Date("2023-03-28"),
       is_available: "true",
