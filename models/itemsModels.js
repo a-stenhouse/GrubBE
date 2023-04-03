@@ -14,9 +14,13 @@ exports.fetchItems = (page = 0, limit = 100) => {
   }
   page = Number(page);
   limit = Number(limit);
-  return Item.find()
-    .skip(page * limit)
-    .limit(limit);
+  return Item.find().then((items) => {
+    const start = page * limit;
+    return {
+      total_items: items.length,
+      items: items.slice(start, start + limit),
+    };
+  });
 };
 
 exports.fetchItemsByLocation = (
@@ -48,9 +52,13 @@ exports.fetchItemsByLocation = (
     {
       $sort: { distance: asc },
     },
-  ])
-    .skip(page * limit)
-    .limit(limit);
+  ]).then((items) => {
+    const start = page * limit;
+    return {
+      total_items: items.length,
+      items: items.slice(start, start + limit),
+    };
+  });
 };
 
 exports.fetchItemsByArea = (lat1, long1, lat2, long2) => {
