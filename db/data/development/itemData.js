@@ -133,7 +133,7 @@ module.exports = [
       type: "Point",
       coordinates: [-2.98392, 53.39925],
     },
-    expiry_date: new Date("2023-04-07"),
+    expiry_date: new Date("2023-05-07"),
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679927223/uwcs5qcovlq6je1uwgvy.jpg",
