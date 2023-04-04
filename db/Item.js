@@ -29,6 +29,10 @@ const itemSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   item_url: String,
   is_available: { type: Boolean, required: true },
+  reserved_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 itemSchema.index({ location: "2dsphere" });

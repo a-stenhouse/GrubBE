@@ -10,17 +10,27 @@ const coordinateCheck = (latitude, longitude) => {
   return true;
 };
 
-exports.invertAvailability = (_id) => {
+exports.invertAvailability = (_id, user_id) => {
   return Item.findOne({ _id })
     .then((item) => {
       if (item) {
-        item.is_available = !item.is_available;
+        if (item.is_available && String(item.user) !== String(user_id)) {
+          item.is_available = false;
+          item.reserved_by = user_id;
+        } else if (
+          !item.is_available &&
+          (String(item.reserved_by) === String(user_id) ||
+            String(item.user) === String(user_id))
+        ) {
+          item.is_available = true;
+          delete item.reserved_by;
+        }
         return item.save();
       } else {
         return Promise.reject({ status: 404, msg: "Item not found" });
       }
     })
-    .then((item) => item.is_available);
+    .then((item) => item);
 };
 
 exports.fetchItems = (page = 0, limit = 100) => {
@@ -31,7 +41,11 @@ exports.fetchItems = (page = 0, limit = 100) => {
   limit = Number(limit);
   return Item.find()
     .populate({ path: "category", model: Category })
-    .populate({ path: "user", select: "username contact", model: User })
+    .populate({
+      path: "user reserved_by",
+      select: "username contact",
+      model: User,
+    })
     .then((items) => {
       const start = page * limit;
       return {
@@ -73,7 +87,10 @@ exports.fetchItemsByLocation = (
   ])
     .then((items) => Category.populate(items, { path: "category" }))
     .then((items) =>
-      User.populate(items, { path: "user", select: "username contact" })
+      User.populate(items, {
+        path: "user reserved_by",
+        select: "username contact",
+      })
     )
     .then((items) => {
       const start = page * limit;
@@ -99,7 +116,11 @@ exports.fetchItemsByArea = (lat1, long1, lat2, long2) => {
     },
   })
     .populate({ path: "category", model: Category })
-    .populate({ path: "user", select: "username contact", model: User });
+    .populate({
+      path: "user reserved_by",
+      select: "username contact",
+      model: User,
+    });
 };
 
 exports.removeItem = (_id) => {
@@ -118,7 +139,11 @@ exports.removeItem = (_id) => {
 exports.fetchItemById = (_id) => {
   return Item.findOne({ _id })
     .populate({ path: "category", model: Category })
-    .populate({ path: "user", select: "username contact", model: User })
+    .populate({
+      path: "user reserved_by",
+      select: "username contact",
+      model: User,
+    })
     .then((item) => {
       if (!item) {
         return Promise.reject({

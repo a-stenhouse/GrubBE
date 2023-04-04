@@ -485,19 +485,43 @@ describe("GET /api/items/:_id", () => {
 });
 
 describe("PATCH /api/items/:_id", () => {
-  it("200: should toggle the availability of the item and return the new availability", () => {
+  it("200: should toggle the availability of the item and return the new item", () => {
     return request(app)
       .patch("/api/items/56cb91bdc3464f14678934ca")
       .set("Authorization", "Bearer " + token)
+      .send({ username: "Mike20" })
       .expect(200)
-      .then(({ body: { is_available } }) => {
-        expect(is_available).toBe(false);
+      .then(({ body: { item } }) => {
+        expect(item.is_available).toBe(false);
+      });
+  });
+
+  it("200: should not allow a user who hasn't reserved or doesn't own the item to unreserve", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
+      .send({ username: "Janet876" })
+      .expect(200)
+      .then(({ body: { item } }) => {
+        expect(item.is_available).toBe(false);
+      });
+  });
+
+  it("200: should  allow a user who owns the item to unreserve", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc3464f14678934ca")
+      .set("Authorization", "Bearer " + token)
+      .send({ username: "John34" })
+      .expect(200)
+      .then(({ body: { item } }) => {
+        expect(item.is_available).toBe(true);
       });
   });
 
   it("401: should only allow an authorised user to toggle availability", () => {
     return request(app)
       .patch("/api/items/56cb91bdc3464f14678934ca")
+      .send({ username: "Mike20" })
       .expect(401);
   });
 
@@ -505,9 +529,21 @@ describe("PATCH /api/items/:_id", () => {
     return request(app)
       .patch("/api/items/56cb91bdc4464f14678934ca")
       .set("Authorization", "Bearer " + token)
+      .send({ username: "Mike20" })
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Item not found");
+      });
+  });
+
+  it("404: should return an error if the user is not found", () => {
+    return request(app)
+      .patch("/api/items/56cb91bdc4464f14678934ca")
+      .set("Authorization", "Bearer " + token)
+      .send({ username: "Mike2" })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("User not found");
       });
   });
 });

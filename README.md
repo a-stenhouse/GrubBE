@@ -89,7 +89,7 @@ This end point accepts the following queries:
 **GET (/api/items/:\_id)** - Returns the details of a single item  
 **GET (/api/categories)** - Returns an array of categories
 
-**PATCH (/api/items/:\_id)** - Toggles the availability of the item
+**PATCH (/api/items/:\_id)** - Toggles the availability of the item. Requires the body to contain an object with a key 'username' set to the username of the account that is making the toggle. Any account can reserve an item but only the owner of the item or account that has reserved the item may unreserve.
 
 **DELETE (/api/items/:\_id)** - Deletes the item with corresponding \_id
 

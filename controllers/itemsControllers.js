@@ -21,9 +21,11 @@ exports.getItems = (request, response, next) => {
 
 exports.toggleItem = (request, response, next) => {
   const { _id } = request.params;
-  invertAvailability(_id)
-    .then((is_available) => {
-      response.status(200).send({ is_available });
+  const { username } = request.body;
+  return fetchUser(username)
+    .then((user) => invertAvailability(_id, user._id))
+    .then((item) => {
+      response.status(200).send({ item });
     })
     .catch(next);
 };
