@@ -12,6 +12,11 @@ const coordinateCheck = (latitude, longitude) => {
 
 exports.invertAvailability = (_id, user_id) => {
   return Item.findOne({ _id })
+    .populate({
+      path: "user",
+      select: "username contact",
+      model: User,
+    })
     .then((item) => {
       if (item) {
         if (item.is_available && String(item.user) !== String(user_id)) {
@@ -20,15 +25,21 @@ exports.invertAvailability = (_id, user_id) => {
         } else if (
           !item.is_available &&
           (String(item.reserved_by) === String(user_id) ||
-            String(item.user) === String(user_id))
+            String(item.user._id) === String(user_id))
         ) {
           item.is_available = true;
-          delete item.reserved_by;
         }
-        return item.save();
+        return item.populate({
+          path: "reserved_by",
+          select: "username contact",
+          model: User,
+        });
       } else {
         return Promise.reject({ status: 404, msg: "Item not found" });
       }
+    })
+    .then((item) => {
+      return item.save();
     })
     .then((item) => item);
 };

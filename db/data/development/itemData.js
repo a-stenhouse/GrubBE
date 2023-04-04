@@ -89,7 +89,7 @@ module.exports = [
     quantity: "1",
     item_url:
       "https://res.cloudinary.com/dhirydfr8/image/upload/v1679926628/vkskauol7bsnsj0eyabe.jpg",
-    is_available: "false",
+    is_available: "true",
   },
   {
     name: "Onions",
