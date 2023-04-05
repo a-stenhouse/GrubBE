@@ -12,6 +12,7 @@ const coordinateCheck = (latitude, longitude) => {
 
 exports.invertAvailability = (_id, user_id) => {
   return Item.findOne({ _id })
+    .populate({ path: "category", model: Category })
     .populate({
       path: "user",
       select: "username contact",
